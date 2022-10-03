@@ -1,8 +1,23 @@
+# FROM nginx:alpine
+
+# ADD . /frontend
+# WORKDIR /frontend
+
+# COPY . .
+# COPY templates /frontend/templates
+# # COPY static /frontend/static
+
+# EXPOSE 3000
+
 FROM nginx:alpine
 
-ADD . /frontend
-WORKDIR /frontend
+# ADD . /frontend
+# WORKDIR /frontend
 
-COPY . .
+# COPY . .
 
-EXPOSE 8080
+COPY templates /backend/
+COPY . /backend
+WORKDIR /backend
+
+EXPOSE 3000
