@@ -1,11 +1,31 @@
 FROM python:3.8-alpine
 
-ADD . /backend
+# ADD . /backend
+# WORKDIR /backend
+# RUN pip install -r requirements.txt
+
+# COPY . .
+
+# EXPOSE 3001
+
+# CMD [ "python3", "app.py"]
+
+
+ADD ./requirements.txt /backend/requirements.txt
 WORKDIR /backend
+COPY ./requirements.txt /backend/requirements.txt
+
 RUN pip install -r requirements.txt
 
-COPY . .
+ADD . /backend
+
+COPY . /frontend/templates
+COPY . /frontend/static
+
+ENTRYPOINT ["python"]
+
+WORKDIR /BoardLabCloud
+
+CMD ["/backend/app.py"]
 
 EXPOSE 3001
-
-CMD [ "python3", "app.py"]

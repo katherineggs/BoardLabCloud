@@ -15,14 +15,16 @@ usrs = db.users # collection called users on the boardlabDB
 tabs = db.tabs # collection called tabs on the boardlabDB 
 
 # Flask
-template_dir = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-template_dir = os.path.join(template_dir, 'BoardLabCloud')
-template_dir = os.path.join(template_dir, 'frontend')
-static = os.path.join(template_dir, 'static')
-template_dir = os.path.join(template_dir, 'templates')
-app = Flask(__name__, template_folder=template_dir, static_folder= static)
-env = Environment(loader=FileSystemLoader(template_dir),
-autoescape=select_autoescape(["html"]))
+# template_dir = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+# template_dir = os.path.join(template_dir, 'BoardLabCloud')
+# template_dir = os.path.join(template_dir, 'frontend')
+# static = os.path.join(template_dir, 'static')
+# templates = os.path.join(template_dir, 'templates')
+
+# template_dir = '/frontend/templates'
+# env = Environment(loader=FileSystemLoader(template_dir))
+# app = Flask(__name__, template_folder='/frontend/templates')
+app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
 
 # Routes
 # render login / index
