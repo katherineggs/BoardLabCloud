@@ -24,7 +24,7 @@ tabs = db.tabs # collection called tabs on the boardlabDB
 # template_dir = '/frontend/templates'
 # env = Environment(loader=FileSystemLoader(template_dir))
 # app = Flask(__name__, template_folder='/frontend/templates')
-app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
+app = Flask(__name__)
 
 # Routes
 # render login / index
