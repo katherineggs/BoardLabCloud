@@ -86,8 +86,7 @@ def profile():
   linklist = []
 
   for document in tabs.find():
-      print (document)
-      # linklist.append(document)
+      linklist.append(document['link'])
 
   return render_template('profile.html', username = username, links = linklist)
 
@@ -102,7 +101,7 @@ def adder():
   # tab = {"user" : dbuser, "link" : links}
   # tabs.save(tab)
 
-  dbuser = usrs.find_one({"username": username})
+  dbuser = usrs.find_one({"name": username})
   tab = {"user" : dbuser, "link" : link}
   tabs.insert_one(tab)
   return render_template('profile.html', username = username)
