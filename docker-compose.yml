@@ -2,12 +2,12 @@ version: "3.8"
 services:
   frontend:
     build: ./frontend
-    # depends_on:
-    #   - backend
+    depends_on:
+      - backend
     ports:
       - "3000:3000"
-    # networks:
-    #   - network-frontend
+    networks:
+      - network-frontend
     # links:
     #   - "backend:backend"
 
@@ -18,9 +18,9 @@ services:
       - mongo
     ports:
       - "3001:3001"
-    # networks:
-    #   - network-frontend
-    #   - network-backend
+    networks:
+      - network-frontend
+      - network-backend
   mongo:
     image: mongo
     restart: always
@@ -29,12 +29,12 @@ services:
     environment: 
       MONGODB_INITDB_ROOT_USERNAME: username
       MONGODB_INITDB_ROOT_PASSWORD: password
-  #   networks:
-  #     - network-backend
-# networks:
-#   network-backend: 
-#     driver: bridge
-#   network-frontend: 
-#     driver: bridge
+    networks:
+      - network-backend
+networks:
+  network-backend: 
+    driver: bridge
+  network-frontend: 
+    driver: bridge
 
   

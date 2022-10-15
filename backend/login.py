@@ -16,11 +16,13 @@ def signup(username, email, password):
     user['password'] = pbkdf2_sha256.encrypt(user['password'])
 
     # Check for existing email address
-    # if usrs.find_one({ "email": user['email'] }):
-    #     return "Email address already in use"
-    # else:
-    usrs.insert_one(user)
-    print(user)
+    if usrs.find_one({ "email": user['email'] }):
+        print("NOPE")
+        return "Email address already in use"
+    else:
+        print(user)
+        usrs.insert_one(user)
+        return "Correct"
 
 #Funcion para ingresar a home
 def login(username, password):

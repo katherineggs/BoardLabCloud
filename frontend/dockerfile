@@ -1,20 +1,28 @@
-FROM nginx:alpine
+FROM python:3.8-alpine
 
-# # ADD . /frontend
-# # WORKDIR /frontend
+# ADD . /frontend
+# WORKDIR /frontend
 
-# # COPY . .
+# COPY . .
 
 # COPY templates /backend/
 # COPY . /backend
 # WORKDIR /backend
 
 # EXPOSE 8080
+COPY ./requirements.txt /frontend/requirements.txt
+WORKDIR /frontend
 
-COPY . /templates
+RUN pip install -r requirements.txt
+
+COPY ./templates /
 WORKDIR /templates
 
-COPY . /static
+COPY . /static/
 WORKDIR /static
+# ENTRYPOINT ["python"]
+
+CMD ["python", "-u", "app.py"]
+# CMD ["/backend/app.py"]
 
 EXPOSE 3000
