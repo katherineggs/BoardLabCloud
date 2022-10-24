@@ -7,13 +7,26 @@ import login as login
 import uuid
 import sys
 
-# base de datos
+# base de datos: MongoDB
 # MongoDB uses collections of documents instead of tables of rows
 client = MongoClient('mongodb://mongo:27017') # MongoDB instance
 
 db = client.boardlabDB # client ^ MongoDB db called boardlabDB
 usrs = db.users # collection called users on the boardlabDB 
 tabs = db.tabs # collection called tabs on the boardlabDB 
+
+#-------------------------------------------------------------------------
+# base de datos: DocumentDB
+##Create a MongoDB client, open a connection to Amazon DocumentDB as a replica set and specify the read preference as secondary preferred
+client = MongoClient('mongodb://adminBoard:boardlab@sample-cluster.node.us-east-1.docdb.amazonaws.com:27017/?tls=true&tlsCAFile=rds-combined-ca-bundle.pem&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false') 
+
+##Specify the database to be used
+db = client.adminBoard
+
+##Specify the collection to be used
+usrs = db.users
+tabs = db.tabs
+
 
 app = Flask(__name__)
 
@@ -103,4 +116,4 @@ def adder():
   return tab
 
 if __name__ == "__main__":
-  app.run(debug=True, host="0.0.0.0", port=3001)
+  app.run(debug=True, host="0.0.0.0", port=8911)
