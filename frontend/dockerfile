@@ -22,7 +22,7 @@ COPY . /static/
 WORKDIR /static
 # ENTRYPOINT ["python"]
 
-CMD ["python", "-u", "app.py"]
+CMD ["python", "-u", "app.py" "--host=0.0.0.0"]
 # CMD ["/backend/app.py"]
 
 EXPOSE 3000
