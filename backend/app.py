@@ -18,14 +18,14 @@ tabs = db.tabs # collection called tabs on the boardlabDB
 #-------------------------------------------------------------------------
 # base de datos: DocumentDB
 ##Create a MongoDB client, open a connection to Amazon DocumentDB as a replica set and specify the read preference as secondary preferred
-client = MongoClient('mongodb://adminBoard:boardlab@sample-cluster.node.us-east-1.docdb.amazonaws.com:27017/?tls=true&tlsCAFile=rds-combined-ca-bundle.pem&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false') 
+# client = MongoClient('mongodb://adminBoard:boardlab@sample-cluster.node.us-east-1.docdb.amazonaws.com:27017/?tls=true&tlsCAFile=rds-combined-ca-bundle.pem&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false') 
 
-##Specify the database to be used
-db = client.adminBoard
+# ##Specify the database to be used
+# db = client.adminBoard
 
-##Specify the collection to be used
-usrs = db.users
-tabs = db.tabs
+# ##Specify the collection to be used
+# usrs = db.users
+# tabs = db.tabs
 
 
 app = Flask(__name__)
@@ -116,4 +116,4 @@ def adder():
   return tab
 
 if __name__ == "__main__":
-  app.run(debug=True, host="0.0.0.0", port=8911)
+  app.run(debug=True, host="0.0.0.0", port=3001)
