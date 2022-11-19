@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: boardlabfrontend
+  namespace: development
+spec:
+  selector:
+    matchLabels:
+      app: boardlabfrontend
+  # remove replica if using gitops
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: boardlabfrontend
+    spec:
+      containers:
+      - name: boardlabfrontend
+        image: katherinegg/boardlabfrontend
+        ports:
+        - containerPort: 3000
+        env:
+        - name: BOARDLAB_BACKEND
+          value: http://k8s-developm-boardlab-415baea403-af1d058fe8ddf83a.elb.us-east-1.amazonaws.com/ # CAMBIAR
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: boardlabfrontend
+  namespace: development
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: external
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+    # service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 3000
+  selector:
+    app: boardlabfrontend

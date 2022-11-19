@@ -8,6 +8,8 @@ services:
       - "3000:3000"
     networks:
       - network-frontend
+    env_file: .env
+
     # links:
     #   - "backend:backend"
 

@@ -1,9 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for
 import requests 
 import sys
+import os
+
+backendUrl = os.environ.get('BOARDLAB_BACKEND')
 
 app = Flask(__name__)
-internal = "http://host.docker.internal:3001/"
+internal = backendUrl
 
 # Routes
 # render login / index
