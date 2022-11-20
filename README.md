@@ -2,9 +2,9 @@
 BoardLab app for Cloud Course :)
 
 Different ways of running our app
-1. [AWS EKS Cluster Application Deploy]()
-2. [Pull our images from Dockerhub and deploy docker-compose]()
-3. [Build our project with our dockerfile & docker-compose]()
+1. [AWS EKS Cluster Application Deploy](https://github.com/katherineggs/BoardLabCloud#aws-eks-cluster-application-deploy)
+2. [Pull our images from Dockerhub and deploy docker-compose](https://github.com/katherineggs/BoardLabCloud#pull-our-images-from-dockerhub-and-deploy-docker-compose)
+3. [Build our project with our dockerfile & docker-compose](https://github.com/katherineggs/BoardLabCloud#build-our-project-with-our-dockerfile--docker-compose)
 ---
 ## AWS EKS Cluster Application Deploy
 
