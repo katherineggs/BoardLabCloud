@@ -1,115 +1,124 @@
 # BoardLabCloud
 BoardLab app for Cloud Course :)
----
 
 Different ways of running our app
+1. [AWS EKS Cluster Application Deploy]()
+2. [Pull our images from Dockerhub and deploy docker-compose]()
+3. [Build our project with our dockerfile & docker-compose]()
 ---
-## Kubernetes Deploy
-## Creación de AWS EKS Cluster y despliegue de aplicación
+## AWS EKS Cluster Application Deploy
 
-En este repositorio encontratas el código necesario para crear un EKS Cluster desde 0 utilizando terraform. También encontrarás los hacks y las instrucciones paso a paso para que puedas crear tu primer cluster y desplegar una aplicación accesible desde internet.
+Code needed to create an EKS Cluster from scratch using terraform. You will also find the hacks and step-by-step instructions so you can create your first cluster and deploy a web-accessible application.
 
-### Prerrequisitos
+### Prerequisites
 
-- Instalar AWS CLI y autenticarte en la linea de comando con tu cuenta de AWS.
-  - [Instalar AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
-  - [Autenticarte con AWS CLI](https://docs.aws.amazon.com/es_es/cli/latest/userguide/cli-configure-quickstart.html)
-- [Instalar Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
-- [Instalar Kubectl](https://kubernetes.io/es/docs/tasks/tools/included/)
+-  Install AWS CLI and authenticate at the command line with your AWS account.
+  - [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+  - [Authenticate with AWS CLI](https://docs.aws.amazon.com/es_es/cli/latest/userguide/cli-configure-quickstart.html)
+- [Install Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+- [Install Kubectl](https://kubernetes.io/es/docs/tasks/tools/included/)
 
 ### AWS EKS Cluster
 
-#### Crear de EKS Cluster
-
-El modulo de terraform [EKS Cluster](terraform-aws/aws-eks-modules/eks-cluster) crea todos los componentes de networking requeridos para luego crear un EKS Cluster.
+#### Create EKS Cluster
 
 ```sh
-## Debes ubicarte en la carpeta "terraform-aws" para ejecutar este comando.
-$ terraform apply --target module.eks-cluster
-## Este modulo creará 17 recursos
+terraform init
 ```
 
-#### Actualizar el contexto de K8s
+The terraform module [EKS Cluster](terraform-aws/aws-eks-modules/eks-cluster) creates all networking components required to create an EKS Cluster.
 
-Actualizar el contexto de Kubernetes para conectar y autenticar kubectl con el cluster creado.
+Folder "terraform-aws"
+```sh
+terraform apply --target module.eks-cluster
+```
+
+#### Update the context of K8s
+
+Update the Kubernetes context to connect and authenticate kubectl with the created cluster.
 
 ```sh
-$ aws eks update-kubeconfig --name eks-cluster-cloud --region us-east-1
-## Modificar el nombre y la region si estas utilizando diferentes valores.
+aws eks update-kubeconfig --name eks-cluster-cloud --region us-east-1
 ```
 
-#### Crear Fargate profiles
+#### Create Fargate profiles
 
-El EKS Cluster utilizara perfiles de forgate para evitar la gestion de nodos, los perfiles de fargate se relacionan con los K8s namespaces para contener los recursos que se crearán.
+The EKS Cluster will use forgate profiles to avoid node management, the fargate profiles are related to the K8s namespaces to contain the resources to be created.
 
+Folder "terraform-aws"
 ```sh
-## Debes ubicarte en la carpeta "terraform-aws" para ejecutar este comando.
-$ terraform apply --target module.eks-fargate
-## Este modulo creará 5 recursos.
+terraform apply --target module.eks-fargate
 ```
 
-#### Crear K8s namespace
+#### Create K8s namespace
 
-El primer recurso de K8s a crear es un namespace. En el paso anterior se creo un Fargate profile con el nombre development, por lo que, el namespace se llamara igual, si decides utilizar otro nombre para el Fargete profile deberás cambiar el nombre del namespace en el manifesto [namespace.yml](k8s-manifests/0-namespace.yml)
+The first K8s resource to create is a namespace. In the previous step a Fargate profile was created with the name development, so, the namespace will be called the same, if you decide to use another name for the Fargate profile you must change the name of the namespace in the manifest [namespace.yml](k8s-manifests/0-namespace.yml).
 
+Folder "k8s-manifests"
 ```sh
-## Debes ubicarte en la carpeta "k8s-manifests" para ejecutar este comando o enviar la ruta completa del manifesto.
-$ kubectl apply -f 0-namespace.yml
-## kubectl es el comando que se utiliza para gestionar todos los recursos en el cluster.
+kubectl apply -f 0-namespace.yml
 ```
 
-#### Crear Loadbalancer Controller
+#### Create Loadbalancer Controller
 
-Para exponer las aplicaciones fuera del Cluster EKS utiliza los recursos de networking de AWS, principalmente los Loadbalancers, para que la implementación funcione es necesario instalar un controller en el EKS Cluster.
+To expose applications outside the EKS Cluster it uses AWS networking resources, mainly Loadbalancers, for the implementation to work it is necessary to install a controller on the EKS Cluster.
 
+Folder "terraform-aws"
 ```sh
-## Debes ubicarte en la carpeta "terraform-aws" para ejecutar este comando.
-$ terraform apply --target module.loadbalancer-controller
-## Este modulo creará 5 recurso.
+terraform apply --target module.loadbalancer-controller
 ```
 
-#### Desplegar applicación
+#### Deploy application
 
-La aplicación a desplegar cuenta con los siguientes componentes:
+The application to be deployed has the following components:
 
-- Base de datos
+- Database
 - Backend
 - Frontend
-Cada componente de desplegara por separada y en orden de dependencia.
+Each component will be deployed separately and in order of dependency.
 
+Folder "k8s-manifests"
+Deploy Database
 ```sh
-## Debes ubicarte en la carpeta "k8s-manifests" para ejecutar este comando o enviar la ruta completa del manifesto.
-## Desplegar Base de Datos
-$ kubectl apply -f 1-mongodb.yml
-## Desplegar Backend
-$ kubectl apply -f 2-backend.yml
-## Desplegar Frontend
-$ kubectl apply -f 3-frontend.yml
+kubectl apply -f 1-mongodb.yml
 ```
 
-### Eliminar todos los recursos
+Folder "k8s-manifests"
+Deploy Backend
+```sh
+kubectl apply -f 2-backend.yml
+```
 
-Cuando termines tus pruebas es importante que destruyas todos los recursos para no incurrir en ningun gasto.
+Folder "k8s-manifests"
+Deploy Frontend
+```sh
+kubectl apply -f 3-frontend.yml
+```
+---
 
-- Elimina todos los K8s services
+### Eliminate all resources
+
+When you finish your tests it is important that you destroy all resources to avoid incurring any costs.
+
+- Eliminate all K8 services
 
 ```sh
-# Obtener el nombre de los servicios
+# Obtain the name of the services
 $ kubectl get services -n development
-# Eliminar todos los servicios
+# Remove all services
 $ kubectl delete service SERVICE_NAME -n development
 ```
 
-- Elimnar todos los recuros de AWS
+- Remove all resources from AWS
 
-```sh
-# Eliminar el loadbalancer controller 
+````sh
+# Remove the loadbalancer controller 
 $ terraform destroy --target module.loadbalancer-controller
-# Eliminar los Fargate profiles
+# Remove Fargate profiles
 $ terraform destroy --target module.eks-fargate
-# Eliminar el EKS Cluster y todos los recursos de Red
+# Remove EKS Cluster and all Network resources
 $ terraform destroy --target module.eks-cluster
-```
+````
 
 ---
 ## Pull our images from Dockerhub and deploy docker-compose
