@@ -22,7 +22,7 @@ spec:
         - containerPort: 3000
         env:
         - name: BOARDLAB_BACKEND
-          value: http://k8s-developm-boardlab-239e316a6d-b9c3937d1cf449a6.elb.us-east-1.amazonaws.com 
+          value: http://k8s-developm-boardlab-239e316a6d-b9c3937d1cf449a6.elb.us-east-1.amazonaws.com/
 ---
 apiVersion: v1
 kind: Service
