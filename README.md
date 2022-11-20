@@ -88,7 +88,8 @@ Deploy Backend
 ```sh
 kubectl apply -f 2-backend.yml
 ```
-
+! Before depolying the frontend, make sure to change the value on  ```env: value``` of the file "3-frontend" to the one of your backend component
+Run ```kubectl get services -n development```, take the external IP and change the value leave the "http://" and the last "/"
 Folder "k8s-manifests"
 Deploy Frontend
 ```sh
